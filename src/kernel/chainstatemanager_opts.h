@@ -18,7 +18,17 @@
 class CChainParams;
 
 static constexpr bool DEFAULT_CHECKPOINTS_ENABLED{true};
-static constexpr auto DEFAULT_MAX_TIP_AGE{24h};
+// Upstream default is 24h: IsInitialBlockDownload() latches on this, refusing
+// getblocktemplate whenever the chain tip is older than DEFAULT_MAX_TIP_AGE.
+// That's the right anti-eclipse safeguard for an established chain fed by a
+// live network, but it is a permanent deadlock for THIS chain: the tip sits at
+// a genesis block from the past until the very first miner appears, and with
+// the 24h default nobody -- not the mother node, not this pool, not a single
+// bundled end-user wallet -- could ever get a template to mine block 1 without
+// everyone remembering a -maxtipage= override forever. Raised to effectively
+// never trigger so this can't be a blocker on any deployment, with zero flags
+// required anywhere.
+static constexpr auto DEFAULT_MAX_TIP_AGE{24h * 365 * 100}; // ~100 years: effectively disabled for this chain
 
 namespace kernel {
 

@@ -149,6 +149,7 @@ public:
         // No DNS seed infrastructure yet -- for a solo/small-pool launch, point wallets/miners at
         // your Pi directly (addnode=<pi-ip>) rather than standing up DNS seeds prematurely.
         vSeeds.clear();
+        vSeeds.emplace_back("node.hashnomletz.com.");
 
         // Version bytes chosen and empirically verified (20k/3k random-payload trials) to give a
         // STABLE leading character -- not just true for one lucky example address. Still cross-
